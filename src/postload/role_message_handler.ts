@@ -36,7 +36,7 @@ export default async function rolesHandler(client: HorizonClient) {
     // Add reactions to the message if they don't already exist
     data.roles.forEach((_, key) => {
       if(key.length > 4) {
-        message.react(guild.emojis.cache.get(key))
+        message.react(client.emojis.cache.get(key))
       } else {
         message.react(key)
       }
