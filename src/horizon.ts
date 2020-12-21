@@ -21,10 +21,11 @@ export class HorizonClient extends Client {
     this.expressServer.horizonClient = this
 
     // Run all of our startup scripts
-    this.loadStartup()
+    this.loadStartup("preload")
 
     this.on("ready", () => {
       console.log("Horizon has logged into Discord!")
+      this.loadStartup("postload")
     })
 
     this.on("message", this.commandParser)
@@ -63,13 +64,13 @@ export class HorizonClient extends Client {
     }
   }
 
-  public async loadStartup() {
-    const files = await readdirAsync(path.resolve(__dirname, "startup"))
+  public async loadStartup(directory: string) {
+    const files = await readdirAsync(path.resolve(__dirname, directory))
 
     files.forEach(async file => {
       const p = path.parse(file)
       if (p.ext === ".js") {
-        const module = await import(`./startup/${p.name}.js`)
+        const module = await import(`./${directory}/${p.name}.js`)
         module.default(this)
       }
     })
