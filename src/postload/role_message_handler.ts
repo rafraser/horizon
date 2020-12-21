@@ -1,5 +1,5 @@
 import { HorizonClient } from '../horizon'
-import { GuildMemberManager, Message, TextChannel, User } from "discord.js"
+import { Message, TextChannel, User, GuildEmoji } from "discord.js"
 
 const ROLE_MESSAGES = [
   {
@@ -10,6 +10,9 @@ const ROLE_MESSAGES = [
       ["🔴", "789897624324669472"],
       ["🟡", "789897296614916107"],
       ["🟢", "789897351530676285"],
+      ["790571007634309190", "789897186439593986"],
+      ["790570849315979315", "789896778178232320"],
+      ["790570922645520394", "789896990951473194"],
     ]),
     only_one: true,
     text: "Click on the below reactions to change your colour!"
@@ -32,7 +35,11 @@ export default async function rolesHandler(client: HorizonClient) {
 
     // Add reactions to the message if they don't already exist
     data.roles.forEach((_, key) => {
-      message.react(key)
+      if(key.length > 4) {
+        message.react(guild.emojis.cache.get(key))
+      } else {
+        message.react(key)
+      }
     })
 
     // Add a reaction handler
@@ -40,8 +47,15 @@ export default async function rolesHandler(client: HorizonClient) {
       if(user.id === client.user.id) return
       if(reaction.message.id != data.message) return
 
+      let reactionId
+      if(reaction.emoji instanceof GuildEmoji) {
+        reactionId = reaction.emoji.id
+      } else {
+        reactionId = reaction.emoji.name
+      }
+
       let role
-      if(role = data.roles.get(reaction.emoji.name)) {
+      if(role = data.roles.get(reactionId)) {
         const member = await guild.members.fetch(user as User)
 
         if(data.only_one) {
