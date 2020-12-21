@@ -1,7 +1,7 @@
 // Load the .env file for our environment before any imports
 import dotenv from "dotenv"
 dotenv.config({
-    path: `${ process.env.HORIZON_ENV || "development" }.env`
+  path: `${ process.env.HORIZON_ENV || "development" }.env`
 })
 
 import { app } from "./express"
