@@ -65,13 +65,14 @@ export class HorizonClient extends Client {
 
   public async loadStartup() {
     const files = await readdirAsync(path.resolve(__dirname, "startup"))
-    files.forEach(async file => {
 
+    files.forEach(async file => {
       const p = path.parse(file)
-      if (p.ext === ".ts") {
-      const module = await import(`./startup/${p.name}.js`)
-      module.default(this)
+      if (p.ext === ".js") {
+        const module = await import(`./startup/${p.name}.js`)
+        module.default(this)
       }
     })
   }
+
 }
