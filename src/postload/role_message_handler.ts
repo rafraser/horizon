@@ -12,7 +12,7 @@ const ROLE_MESSAGES = [
       ["🟢", "789897351530676285"],
     ]),
     only_one: true,
-    text: "Horizon is (peacefully) taking over the world. Please continue to ignore this message."
+    text: "Click on the below reactions to change your colour!"
   }
 ]
 
