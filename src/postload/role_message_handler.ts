@@ -25,7 +25,7 @@ const ROLE_MESSAGES = [
       ["795592327149780992", "795593257467379762"], // Deep Orange
     ]),
     only_one: true,
-    text: "Click on the below reactions to change your colour!"
+    text: "Select a reaction below to change your role colour:"
   }
 ]
 
