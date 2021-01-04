@@ -18,4 +18,4 @@ jobs:
             cd horizon
             git pull
             npm install
-            npm build
+            npm run build
