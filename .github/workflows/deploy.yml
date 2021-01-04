@@ -1,0 +1,21 @@
+name: Deploy
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HORIZON_HOST }}
+          username: ${{ secrets.HORIZON_USERNAME }}
+          key: ${{ secrets.HORIZON_SSHKEY }}
+          script: |
+            cd horizon
+            git pull
+            npm install
+            npm build
