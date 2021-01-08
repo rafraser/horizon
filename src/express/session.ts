@@ -25,11 +25,13 @@ const sessionOptions = {
   cookie: { secure: false },
   store: store,
   resave: false,
-  saveUninitialized: false
+  saveUninitialized: false,
+  proxy: false
 }
 
 if (process.env.HORIZON_ENV === 'production') {
   sessionOptions.cookie.secure = true
+  sessionOptions.proxy = true
 }
 
 const configuredSession = session(sessionOptions)
