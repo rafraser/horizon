@@ -26,6 +26,8 @@
     "express": "^4.17.1",
     "express-mysql-session": "^2.1.5",
     "node-fetch": "^2.6.1",
+    "sanitize-html": "^2.3.0",
+    "socket.io": "^3.0.5",
     "typescript": "^4.1.3"
   },
   "devDependencies": {
@@ -36,6 +38,7 @@
     "@types/ws": "^7.4.0",
     "@typescript-eslint/eslint-plugin": "^4.12.0",
     "@typescript-eslint/parser": "^4.12.0",
+    "@types/sanitize-html": "^1.27.0",
     "eslint": "^7.17.0",
     "eslint-config-standard": "^16.0.2",
     "eslint-plugin-import": "^2.22.1",
