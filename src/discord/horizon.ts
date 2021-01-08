@@ -1,15 +1,11 @@
-import { Client, ClientOptions, Message, DMChannel, TextChannel } from "discord.js"
-import { Application } from "express"
-import { Command } from "./command"
-import { readdirAsync } from "./utils"
-import path from "path"
-
-export interface ExpressServer extends Application {
-  horizonClient?: HorizonClient
-}
+import { Client, ClientOptions, Message, DMChannel } from 'discord.js'
+import { Command } from './command'
+import { readdirAsync } from '../utils'
+import { ExpressServer } from '../express/express'
+import path from 'path'
 
 export class HorizonClient extends Client {
-  public static prefixes = ["!"]
+  public static prefixes = ['!']
 
   public commands: Map<string, Command>
   public expressServer: ExpressServer
@@ -21,22 +17,22 @@ export class HorizonClient extends Client {
     this.expressServer.horizonClient = this
 
     // Run all of our startup scripts
-    this.loadStartup("preload")
+    this.loadStartup('preload')
 
-    this.on("ready", () => {
-      console.log("Horizon has logged into Discord!")
-      this.loadStartup("postload")
+    this.on('ready', () => {
+      console.log('Horizon has logged into Discord!')
+      this.loadStartup('postload')
     })
 
-    this.on("message", this.commandParser)
+    this.on('message', this.commandParser)
   }
 
   public commandParser (message: Message) {
     // Ensure that we're in a good state to run commands
     if (message.author.bot) return
-    if (process.env.TESTING_CHANNEL && message.channel.id != process.env.TESTING_CHANNEL) return
+    if (process.env.TESTING_CHANNEL && message.channel.id !== process.env.TESTING_CHANNEL) return
     if (message.channel instanceof DMChannel) return
-    const channel = message.channel as TextChannel
+    // const channel = message.channel as TextChannel
 
     // Check for the prefix
     let isCommand = false
@@ -51,7 +47,7 @@ export class HorizonClient extends Client {
     if (!isCommand) return
 
     // Handle arguments with fancy regex, then check the command name
-    args = args.match(/[^"“” \n]+|["“][^"”]+["”]/g).map(arg => arg.replace(/^["“]|["”]$/g, ""))
+    args = args.match(/[^"“” \n]+|["“][^"”]+["”]/g).map(arg => arg.replace(/^["“]|["”]$/g, ''))
     const cmd = args.shift().toLowerCase()
     if (!this.commands || !this.commands.has(cmd)) return
     const command = this.commands.get(cmd)
@@ -64,16 +60,15 @@ export class HorizonClient extends Client {
     }
   }
 
-  public async loadStartup(directory: string) {
+  public async loadStartup (directory: string) {
     const files = await readdirAsync(path.resolve(__dirname, directory))
 
     files.forEach(async file => {
       const p = path.parse(file)
-      if (p.ext === ".js") {
+      if (p.ext === '.js') {
         const module = await import(`./${directory}/${p.name}.js`)
         module.default(this)
       }
     })
   }
-
 }
