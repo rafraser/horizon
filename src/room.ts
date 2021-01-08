@@ -1,9 +1,11 @@
 /* eslint-disable no-use-before-define */
 import { Namespace, Socket } from 'socket.io'
 import { NextFunction } from 'express'
-
 import { io } from './express/express'
 import configuredSession from './express/session'
+
+import { HorizonClient } from './discord/horizon'
+import { TextChannel } from 'discord.js'
 
 const wrap = (middleware: any) => (socket: Socket, next: NextFunction) => middleware(socket.request, {}, next)
 
@@ -15,18 +17,30 @@ export interface GameroomType {
   register: (socket: Socket, room: GameRoom) => void
 }
 
+export interface DiscordRoomData {
+  client: HorizonClient
+  channel: TextChannel
+  createFunction: (channel: TextChannel, room: GameRoom) => void
+  finishFunction: (channel: TextChannel, room: GameRoom) => void
+}
+
 export class GameRoom {
   id: string;
   host?: string;
   type: GameroomType;
   io: Namespace;
   clients: number;
+  discord?: DiscordRoomData;
+  gamedata: any;
+
   // eslint-disable-next-line no-undef
   timeout?: NodeJS.Timeout;
 
-  constructor (type: GameroomType, host: string = undefined) {
+  constructor (type: GameroomType, host: string = undefined, discord: DiscordRoomData = undefined) {
     this.type = type
     this.host = host
+    this.discord = discord
+    this.gamedata = {}
 
     this.id = Math.random().toString(16).slice(2) // can we do better
     this.clients = 0
@@ -70,10 +84,20 @@ export class GameRoom {
 
     // Add a timeout for the first connection
     this.timeout = setTimeout(() => this.remove(), 30 * 1000)
+
+    // Run Discord callback (if applicable)
+    if (this.discord && this.discord.createFunction) {
+      this.discord.createFunction(this.discord.channel, this)
+    }
   }
 
   public remove () {
     console.log('Closing gameroom!', this.id)
     roomList.delete(this.id)
+
+    // Run Discord callback (if applicable)
+    if (this.discord && this.discord.finishFunction) {
+      this.discord.finishFunction(this.discord.channel, this)
+    }
   }
 }
