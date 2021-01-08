@@ -11,8 +11,12 @@ export interface ExpressServer extends Application {
 export const app = express() as ExpressServer
 app.use(configuredSession)
 
-app.get('/', (_, res) => {
-  res.send('Hello World!')
+app.get('/', (req, res) => {
+  if (req.session.user) {
+    res.send(req.session.user.username + '#' + req.session.user.discriminator)
+  } else {
+    res.send('Hello World!')
+  }
 })
 
 app.listen(process.env.EXPRESS_PORT, () => {

@@ -15,7 +15,7 @@ const PORT = process.env.EXPRESS_PORT
 
 let redirect = `http://localhost:${PORT}/user/callback`
 if (process.env.HORIZON_ENV === 'production') {
-  redirect = `http://horizon.sealion.space:${PORT}/user/callback`
+  redirect = 'http://horizon.sealion.space/user/callback'
 }
 
 async function getDiscordUserData (token: string) {
@@ -61,12 +61,15 @@ router.get('/callback', async (req, res) => {
   // Get ID and username from token
   const json = await response.json()
   const user = await getDiscordUserData(json.access_token)
-  console.log(user)
 
   // Finish login, redirect to user page
   req.session.user = user
   req.session.save(_ => {
-    res.redirect('/')
+    if (req.session.loginRedirect) {
+      res.redirect(req.session.loginRedirect)
+    } else {
+      res.redirect('/')
+    }
   })
 })
 
