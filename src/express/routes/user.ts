@@ -11,12 +11,8 @@ export class User {
 const router = express.Router()
 const CLIENT_ID = process.env.DISCORD_CLIENT_ID
 const CLIENT_SECRET = process.env.DISCORD_CLIENT_SECRET
-const PORT = process.env.EXPRESS_PORT
-
-let redirect = `http://localhost:${PORT}/user/callback`
-if (process.env.HORIZON_ENV === 'production') {
-  redirect = 'http://horizon.sealion.space/user/callback'
-}
+const DOMAIN = process.env.DOMAIN || `http://localhost:${process.env.EXPRESS_PORT}`
+const redirectUrl = `${DOMAIN}/user/callback`
 
 async function getDiscordUserData (token: string) {
   const res = await fetch('https://discord.com/api/users/@me', {
@@ -30,7 +26,7 @@ async function getDiscordUserData (token: string) {
 }
 
 router.get('/login', (_, res) => {
-  const redirectEncoded = encodeURIComponent(redirect)
+  const redirectEncoded = encodeURIComponent(redirectUrl)
   res.redirect(`https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}&scope=identify&response_type=code&redirect_uri=${redirectEncoded}`)
 })
 
@@ -51,7 +47,7 @@ router.get('/callback', async (req, res) => {
   data.append('code', code as string)
   data.append('grant_type', 'authorization_code')
   data.append('scope', 'identify')
-  data.append('redirect_uri', redirect)
+  data.append('redirect_uri', redirectUrl)
   const response = await fetch('https://discordapp.com/api/oauth2/token', {
     body: data,
     method: 'POST'
