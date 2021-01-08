@@ -1,0 +1,98 @@
+<html>
+    <head>
+        <style>
+            body {
+                font-family: sans-serif;
+                background-color: #2f3640;
+            }
+
+            .centered {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+
+                width: 50%;
+                background-color:#353b48;
+                color: white;
+                border-radius: 32px;
+                text-align: center;
+                border-bottom: 4px solid #536dfe;
+                box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+            }
+
+            .centered img {
+                width: 320px;
+                margin: -16px auto;
+                display: block;
+            }
+
+            .centered h1 {
+                font-variant: small-caps;
+                margin: 0 auto;
+            }
+
+            .centered p {
+                font-size: 1.25em;
+                width: 60%;
+                margin: 8px auto;
+            }
+
+            .centered a {
+                display: inline-block;
+                margin: 32px auto;
+                font-size: 1.75em;
+                text-decoration: none;
+                font-variant: small-caps;
+
+                color: white;
+                text-decoration: none;
+                background-color: #2f3640;
+                border-radius: 24px;
+                border: 2px solid #536dfe;
+                padding: 16px 32px;
+                box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+                transition: box-shadow 0.35s;
+            }
+
+            .centered a:hover {
+                box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+            }
+        </style>
+    </head>
+    <body>
+        <div class="centered" id="container">
+            <img id="horizon-image" width="320" height="320" alt="Horizon" src="/img/horizon_indigo.png">
+            <h1>Horizon</h1>
+            <p>To access this content, please login with Discord</p>
+            <a id="login-button" alt="Login" href="/user/login">Login</a>
+        </div>
+    </body>
+    <script>
+        var colors = {
+            "red": "#ff1744",
+            "pink": "#ff4081",
+            "purple": "#8e24aa",
+            "deeppurple": "#7c4dff",
+            "indigo": "#536dfe",
+            "blue": "#2979ff",
+            "lightblue": "#40c4ff",
+            "cyan": "#00e5ff",
+            "teal": "#1de9b6",
+            "green": "#00e676",
+            "lightgreen": "#76ff03",
+            "lime": "#c6ff00",
+            "yellow": "#ffff00",
+            "amber": "#ffb300",
+            "orange": "#ff6d00",
+            "deeporange": "#f4511e"
+        }
+
+        var keys = Object.keys(colors)
+        var colorName = keys[Math.floor(Math.random() * keys.length)]
+        var colorHex = colors[colorName]
+        document.getElementById("horizon-image").src = "/img/horizon_" + colorName + ".png"
+        document.getElementById("login-button").style.borderColor = colorHex
+        document.getElementById("container").style.borderBottomColor = colorHex
+    </script>
+</html>
