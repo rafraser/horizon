@@ -1,9 +1,16 @@
 import express from 'express'
-import { requireLogin } from '../middleware'
+import { checkAlreadyPlaying } from '../middleware'
+import { roomList } from '../../room'
 
 const router = express.Router()
 export default router
 
-router.get('/:roomid', requireLogin, (req, res) => {
-  res.send('Room not found.')
+router.get('/:roomid', checkAlreadyPlaying, (req, res) => {
+  const roomId = req.params.roomid
+  const room = roomList.get(roomId)
+  if (room) {
+    res.sendFile('pages/' + room.type.page, { root: '.' })
+  } else {
+    res.send('Room not found')
+  }
 })

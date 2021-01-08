@@ -10,7 +10,7 @@ import { TextChannel } from 'discord.js'
 const wrap = (middleware: any) => (socket: Socket, next: NextFunction) => middleware(socket.request, {}, next)
 
 export const roomList = new Map() as Map<string, GameRoom>
-export const userPlaying = new Map() as Map<string, boolean>
+export const playingUsers = new Map() as Map<string, boolean>
 
 export interface GameroomType {
   page: string
@@ -51,18 +51,25 @@ export class GameRoom {
     // Don't let sockets connect without authentication
     this.io.use(wrap(configuredSession))
     this.io.use((socket: any, next) => {
-      if (socket.request.session.user) {
-        socket.user = socket.request.session.user
-        next()
-      } else {
+      if (!socket.request.session.user) {
         next(new Error('Unauthorized'))
+        return
       }
+
+      if (playingUsers.has(socket.request.session.user.id)) {
+        next(new Error('Already in-game'))
+        return
+      }
+
+      socket.user = socket.request.session.user
+      next()
     })
 
     // Handle socket connections - pass to roomtype handler
     this.io.on('connection', socket => {
+      console.log(this.id, socket.user.id)
       this.clients++
-      userPlaying.set(socket.user.id, true)
+      playingUsers.set(socket.user.id, true)
 
       if (this.timeout) {
         clearTimeout(this.timeout)
@@ -70,6 +77,7 @@ export class GameRoom {
 
       // Delete rooms with no players
       socket.on('disconnect', () => {
+        playingUsers.delete(socket.user.id)
         this.clients--
         if (this.clients <= 0) {
           this.remove()
