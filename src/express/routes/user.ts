@@ -4,6 +4,8 @@ import fetch from 'node-fetch'
 import { User } from '../../utils'
 
 const router = express.Router()
+export default router
+
 const CLIENT_ID = process.env.DISCORD_CLIENT_ID
 const CLIENT_SECRET = process.env.DISCORD_CLIENT_SECRET
 const DOMAIN = process.env.DOMAIN || `http://localhost:${process.env.EXPRESS_PORT}`
@@ -63,5 +65,3 @@ router.get('/callback', async (req, res) => {
     }
   })
 })
-
-export default router
