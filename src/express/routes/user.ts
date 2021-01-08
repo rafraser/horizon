@@ -1,12 +1,7 @@
 import express from 'express'
 import fetch from 'node-fetch'
 
-export class User {
-  id: string;
-  username: string;
-  discriminator: string;
-  avatar: string;
-}
+import { User } from '../../utils'
 
 const router = express.Router()
 const CLIENT_ID = process.env.DISCORD_CLIENT_ID
