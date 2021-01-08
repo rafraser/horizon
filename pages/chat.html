@@ -26,7 +26,6 @@
     var parts = window.location.href.split('/');
     var roomId = parts.pop() || parts.pop();
     var socket = io("/" + roomId);
-    console.log("Connected to", roomId)
     var form = document.getElementById('form');
     var input = document.getElementById('input');
 
@@ -38,11 +37,19 @@
       }
     });
 
+    socket.on('connect', function() {
+      console.log("Connected to", roomId)
+    })
+
     socket.on('message', function(msg) {
         var item = document.createElement('li');
         item.innerHTML = '<b>' + msg.username + '</b>: ' + msg.message;
         messages.appendChild(item);
         window.scrollTo(0, document.body.scrollHeight);
+    });
+
+    socket.on('connect_error', function(e) {
+      console.error(e)
     });
   </script>
 </html>
