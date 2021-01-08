@@ -1,18 +1,22 @@
 import sanitize from 'sanitize-html'
 import { performance } from 'perf_hooks'
-import { Socket } from 'socket.io'
+import { GameRoom, GameSocket } from '../room'
 
-import { User } from '../utils'
-
-interface ChatSocket extends Socket {
-  user: User
+interface ChatSocket extends GameSocket {
   lastChat: number
 }
 
 export default {
+  nicename: 'Chat Room (Test)',
   page: 'chat.html',
 
-  register (sock: Socket) {
+  init (room: GameRoom) {
+    room.gamedata = {
+      messageCount: 0
+    }
+  },
+
+  register (sock: GameSocket, room: GameRoom) {
     const socket = <ChatSocket>sock
 
     socket.on('message', (text) => {
@@ -20,10 +24,12 @@ export default {
 
       const cleanText = sanitize(text, { allowedTags: [] }).trim()
       if (cleanText.length < 1) return
+
       socket.emit('message', {
         username: socket.user.username,
         message: cleanText
       })
+      room.gamedata.messageCount++
     })
   }
 }
