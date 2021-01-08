@@ -11,7 +11,7 @@ export class User {
 const router = express.Router()
 const CLIENT_ID = process.env.DISCORD_CLIENT_ID
 const CLIENT_SECRET = process.env.DISCORD_CLIENT_SECRET
-const PORT = process.env.PORT
+const PORT = process.env.EXPRESS_PORT
 
 let redirect = `http://localhost:${PORT}/user/callback`
 if (process.env.HORIZON_ENV === 'production') {
@@ -69,3 +69,5 @@ router.get('/callback', async (req, res) => {
     res.redirect('/')
   })
 })
+
+export default router

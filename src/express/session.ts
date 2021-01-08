@@ -4,12 +4,13 @@ import MySQLSession from 'express-mysql-session'
 declare module 'express-session' {
   // eslint-disable-next-line no-unused-vars
   interface Session {
-    user: any
+    user: any,
+    loginRedirect: string
   }
 }
 
 const sqlOptions = {
-  host: 'localhost',
+  host: process.env.DATABASE_HOST,
   port: 3306,
   user: process.env.DATABASE_USER,
   password: process.env.DATABASE_PASSWORD,
@@ -24,7 +25,7 @@ const sessionOptions = {
   cookie: { secure: false },
   store: store,
   resave: false,
-  saveUninitalized: false
+  saveUninitialized: false
 }
 
 if (process.env.HORIZON_ENV === 'production') {
