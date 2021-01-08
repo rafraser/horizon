@@ -1,6 +1,4 @@
 import express, { Application } from 'express'
-import path from 'path'
-
 import { HorizonClient } from '../discord/horizon'
 
 import configuredSession from './session'
