@@ -11,6 +11,6 @@ router.get('/:roomid', checkAlreadyPlaying, (req, res) => {
   if (room) {
     res.sendFile('pages/' + room.type.page, { root: '.' })
   } else {
-    res.send('Room not found')
+    res.sendFile('pages/noroom.html', { root: '.' })
   }
 })
