@@ -14,7 +14,18 @@ function buildEmbed (room: GameRoom): MessageEmbed {
 
   if (room.active) {
     embed.setURL(`${DOMAIN}/room/${room.id}`)
-    embed.addField('Players', room.clients, true)
+
+    let clientString = Array.from(room.clients.values()).reduce((acc, val) => {
+      if (acc !== '') {
+        acc = acc + ', '
+      }
+      return acc + val.user.username
+    }, '')
+
+    if (clientString === '') {
+      clientString = 'Waiting...'
+    }
+    embed.addField('Players', clientString, true)
   } else {
     embed.setDescription('This room is no longer active.')
   }

@@ -8,7 +8,7 @@ import { User } from './utils'
 const wrap = (middleware: any) => (socket: Socket, next: NextFunction) => middleware(socket.request, {}, next)
 
 export const roomList = new Map() as Map<string, GameRoom>
-export const playingUsers = new Map() as Map<string, boolean>
+export const playingUsers = new Map() as Map<string, GameRoom>
 
 export interface GameroomType {
   nicename: string
@@ -25,7 +25,7 @@ export interface GameSocket extends Socket {
 export class GameRoom {
   id: string;
   type: GameroomType;
-  clients: number;
+  clients: Map<string, GameSocket>;
   gamedata: any;
   active: boolean = true;
   io: Namespace;
@@ -43,7 +43,7 @@ export class GameRoom {
     this.gamedata = {}
 
     this.id = Math.random().toString(16).slice(2) // can we do better
-    this.clients = 0
+    this.clients = new Map()
     this.type.init(this)
 
     console.log('New GameRoom!', this.id)
@@ -69,8 +69,8 @@ export class GameRoom {
     // Handle socket connections - pass to roomtype handler
     this.io.on('connection', socket => {
       console.log(this.id, socket.user.id)
-      this.clients++
-      playingUsers.set(socket.user.id, true)
+      this.clients.set(socket.user.id, socket)
+      playingUsers.set(socket.user.id, this)
 
       if (this.timeout) {
         clearTimeout(this.timeout)
@@ -79,8 +79,8 @@ export class GameRoom {
       // Delete rooms with no players
       socket.on('disconnect', () => {
         playingUsers.delete(socket.user.id)
-        this.clients--
-        if (this.clients <= 0) {
+        this.clients.delete(socket.user.id)
+        if (this.clients.size <= 0) {
           this.remove()
         }
       })
