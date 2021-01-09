@@ -4,24 +4,7 @@ import { roomList, playingUsers } from '../../room'
 const router = express.Router()
 export default router
 
-export function checkAlreadyPlaying (req: express.Request, res: express.Response, next: express.NextFunction) {
-  if (!req.session.user) {
-    req.session.loginRedirect = req.originalUrl
-    req.session.save(_ => {
-      res.sendFile('pages/login.html', { root: '.' })
-    })
-
-    return
-  }
-
-  if (playingUsers.has(req.session.user.id)) {
-    res.sendFile('pages/ingame.html', { root: '.' })
-    return
-  }
-  next()
-}
-
-router.get('/:roomid', checkAlreadyPlaying, (req, res) => {
+router.get('/:roomid', (req, res) => {
   // Ensure that the room exists
   const roomId = req.params.roomid
   const room = roomList.get(roomId)

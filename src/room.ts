@@ -108,6 +108,9 @@ export class GameRoom {
     roomList.delete(this.id)
     this.active = false
 
+    // Cleanup the socket namespace
+    this.io.removeAllListeners()
+
     // Run finish callback if applicable
     if (this.finishFunction) {
       this.finishFunction(this)

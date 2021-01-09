@@ -23,7 +23,7 @@ function buildEmbed (room: GameRoom): MessageEmbed {
     }, '')
 
     if (clientString === '') {
-      clientString = 'Waiting...'
+      clientString = 'None'
     }
     embed.addField('Players', clientString, true)
   } else {
