@@ -20,10 +20,14 @@ export default {
     const socket = <ChatSocket>sock
 
     socket.on('message', (text) => {
-      if (socket.lastChat && (performance.now() - socket.lastChat) < 500) return
+      if (socket.lastChat && (performance.now() - socket.lastChat) < 500) {
+        console.log('Dropping message | last ', (performance.now() - socket.lastChat))
+        return
+      }
 
       const cleanText = sanitize(text, { allowedTags: [] }).trim()
       if (cleanText.length < 1) return
+      console.log('MSG', socket.user.username, cleanText)
 
       socket.emit('message', {
         username: socket.user.username,
