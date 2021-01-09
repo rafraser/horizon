@@ -5,6 +5,7 @@ interface DrawSocket extends GameSocket {}
 
 export const CANVAS_WIDTH = 1024
 export const CANVAS_HEIGHT = 1024
+export const CANVAS_BACKGROUND = 'white'
 
 export const CANVAS_COLORS = [
   '#ff1744',
@@ -21,10 +22,12 @@ export const CANVAS_COLORS = [
   '#ffff00',
   '#ffb300',
   '#ff6d00',
-  '#f4511e'
+  '#f4511e',
+  '#000000'
 ]
 
 export function generateImage (room: GameRoom) {
+  console.log(room, room.gamedata)
   return room.gamedata.canvas.toDataURL()
 }
 
@@ -46,18 +49,33 @@ export const DrawRoom = {
 
   init (room: GameRoom) {
     const canvas = createCanvas(CANVAS_WIDTH, CANVAS_HEIGHT)
+    const context = canvas.getContext('2d')
+    context.fillStyle = CANVAS_BACKGROUND
+    context.fillRect(0, 0, canvas.width, canvas.height)
+
     room.gamedata = {
       canvas: canvas,
-      context: canvas.getContext('2d'),
-      actions: []
+      context: context,
+      usernames: []
     }
   },
 
   register (sock: GameSocket, room: GameRoom) {
     const socket = <DrawSocket>sock
 
-    socket.emit('palette', CANVAS_COLORS)
+    // Keep track of all usernames that have played
+    if (room.gamedata.usernames.indexOf(socket.user.username) === -1) {
+      room.gamedata.usernames.push(socket.user.username)
+    }
 
+    // Broadcast the palette choices + current data
+    socket.emit('create canvas', {
+      palette: CANVAS_COLORS,
+      canvasData: room.gamedata.canvas.toDataURL()
+    })
+
+    // Network drawing
+    // todo: validate data
     socket.on('drawing', (data) => {
       draw(room, data)
       socket.broadcast.emit('drawing', data)

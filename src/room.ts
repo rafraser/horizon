@@ -68,7 +68,7 @@ export class GameRoom {
 
     // Handle socket connections - pass to roomtype handler
     this.io.on('connection', socket => {
-      console.log(this.id, socket.user.id)
+      console.log('CONN', this.id, socket.user.id)
       this.clients.set(socket.user.id, socket)
       playingUsers.set(socket.user.id, this)
 
@@ -104,17 +104,17 @@ export class GameRoom {
   }
 
   public remove () {
+    // Run finish callback if applicable
+    if (this.finishFunction) {
+      this.finishFunction(this)
+    }
+
     console.log('Closing gameroom!', this.id)
     roomList.delete(this.id)
     this.active = false
 
     // Cleanup the socket namespace
     this.io.removeAllListeners()
-
-    // Run finish callback if applicable
-    if (this.finishFunction) {
-      this.finishFunction(this)
-    }
   }
 }
 

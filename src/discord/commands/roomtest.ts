@@ -1,9 +1,9 @@
-import { MessageEmbed, MessageAttachment } from 'discord.js'
+import { MessageEmbed, MessageAttachment, TextChannel } from 'discord.js'
 import { HorizonClient, Message } from '../command'
 
 import { createNewRoom, GameRoom } from '../../room'
 import { ChatRoom } from '../../rooms/chat'
-import { DrawRoom, generateImage } from '../../rooms/draw'
+import { DrawRoom } from '../../rooms/draw'
 
 const DOMAIN = process.env.DOMAIN || `http://localhost:${process.env.EXPRESS_PORT}`
 
@@ -42,12 +42,16 @@ const contentFunctions = {
   },
 
   'Drawing Room (Test)': function (room: GameRoom, embed: MessageEmbed): MessageEmbed {
-    const image = generateImage(room)
-    const imageStream = Buffer.from(image, 'base64')
-    const attachment = new MessageAttachment(imageStream, 'canvas.png')
-    embed.attachFiles([attachment])
-    embed.setImage('attachment://canvas.png')
     return embed
+  }
+}
+
+const finishFunctions = {
+  'Drawing Room (Test)': function (room: GameRoom, channel: TextChannel): void {
+    const stream = room.gamedata.canvas.createPNGStream()
+    const attachment = new MessageAttachment(stream, 'canvas.png')
+    const usernames = room.gamedata.usernames.join(', ')
+    channel.send(`An artwork created by: ${usernames}`, attachment)
   }
 }
 
@@ -72,14 +76,23 @@ export default {
       }
     }
 
-    const content = (contentFunctions as any)[roomType.nicename]
     const update = (room: GameRoom) => {
       embedMessage.edit(buildEmbed(room, content))
     }
 
+    const content = (contentFunctions as any)[roomType.nicename]
     const room = createNewRoom(roomType, message.member.id)
     room.setUpdateFunction(update, 30)
-    room.setFinishFunction(update)
+
+    if (roomType.nicename in finishFunctions) {
+      room.setFinishFunction((room: GameRoom) => {
+        (finishFunctions as any)[roomType.nicename](room, embedMessage.channel)
+        update(room)
+      })
+    } else {
+      room.setFinishFunction(update)
+    }
+
     const embedMessage = await message.channel.send(buildEmbed(room, content))
   }
 }

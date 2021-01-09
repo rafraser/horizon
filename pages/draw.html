@@ -53,7 +53,7 @@
   <script>
     var parts = window.location.href.split('/');
     var roomId = parts.pop() || parts.pop();
-    var socket = io("/" + roomId);
+    var socket = io("/" + roomId, {reconnection: false});
 
     var canvas = document.getElementById('drawing')
     var ctx = canvas.getContext('2d')
@@ -64,7 +64,7 @@
     canvas.addEventListener('mousedown', onMouseDown, false)
     canvas.addEventListener('mouseup', onMouseUp, false)
     canvas.addEventListener('mouseout', onMouseUp, false)
-    canvas.addEventListener('mousemove', throttleDrawing(onMouseMove, 20), false)
+    canvas.addEventListener('mousemove', throttleDrawing(onMouseMove, 15), false)
 
     function getPosition(e) {
       var rect = canvas.getBoundingClientRect()
@@ -138,7 +138,6 @@
       palette = colors
 
       var container = document.getElementById("container")
-      console.log(colors)
       for(var i = 0; i < colors.length; i++) {
         var box = document.createElement("div")
         box.style.backgroundColor = colors[i]
@@ -146,10 +145,22 @@
         box.id = "color-" + i
         box.addEventListener('click', updateColor, false)
         container.appendChild(box)
-        console.log(box)
       }
     }
-    socket.on('palette', buildPalette)
+
+    function loadImage(data) {
+      var image = new Image()
+      image.onload = function() {
+        ctx.drawImage(image, 0, 0)
+      }
+
+      image.src = data
+    }
+
+    socket.on('create canvas', (data) => {
+      buildPalette(data.palette)
+      loadImage(data.canvasData)
+    })
 
     socket.on('drawing', function(data) {
       draw(data.x0, data.y0, data.x1, data.y1, data.color)
@@ -158,5 +169,10 @@
     socket.on('connect_error', function(e) {
       console.error(e)
     });
+
+    socket.on('disconnect', function(e) {
+      var newCanvas = canvas.cloneNode(true)
+      canvas.parentNode.replaceChild(canvas, newCanvas)
+    })
   </script>
 </html>
