@@ -30,6 +30,8 @@ const ROLE_MESSAGES = [
 ]
 
 export default async function rolesHandler (client: HorizonClient) {
+  if (process.env.HORIZON_ENV === 'development') return
+
   ROLE_MESSAGES.forEach(async data => {
     const guild = await client.guilds.fetch(data.guild)
     const channel = guild.channels.cache.get(data.channel) as TextChannel

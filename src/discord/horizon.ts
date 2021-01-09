@@ -31,6 +31,7 @@ export class HorizonClient extends Client {
     // Ensure that we're in a good state to run commands
     if (message.author.bot) return
     if (process.env.TESTING_CHANNEL && message.channel.id !== process.env.TESTING_CHANNEL) return
+    if (process.env.BLOCK_CHANNEL && message.channel.id === process.env.BLOCK_CHANNEL) return
     if (message.channel instanceof DMChannel) return
     // const channel = message.channel as TextChannel
 
