@@ -6,7 +6,7 @@ interface ChatSocket extends GameSocket {
   lastChat: number
 }
 
-export default {
+export const ChatRoom = {
   nicename: 'Chat Room (Test)',
   page: 'chat.html',
 
