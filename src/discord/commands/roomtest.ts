@@ -1,7 +1,9 @@
-import { MessageEmbed } from 'discord.js'
+import { MessageEmbed, MessageAttachment } from 'discord.js'
 import { HorizonClient, Message } from '../command'
+
 import { createNewRoom, GameRoom } from '../../room'
 import { ChatRoom } from '../../rooms/chat'
+import { DrawRoom, generateImage } from '../../rooms/draw'
 
 const DOMAIN = process.env.DOMAIN || `http://localhost:${process.env.EXPRESS_PORT}`
 
@@ -40,6 +42,11 @@ const contentFunctions = {
   },
 
   'Drawing Room (Test)': function (room: GameRoom, embed: MessageEmbed): MessageEmbed {
+    const image = generateImage(room)
+    const imageStream = Buffer.from(image, 'base64')
+    const attachment = new MessageAttachment(imageStream, 'canvas.png')
+    embed.attachFiles([attachment])
+    embed.setImage('attachment://canvas.png')
     return embed
   }
 }
@@ -51,16 +58,21 @@ export default {
   async execute (client: HorizonClient, message: Message, args: string[]) {
     // Determine room type and content function
     let roomType = ChatRoom
+    console.log(args)
+
     if (args.length >= 1) {
       const arg = args.shift().toLowerCase()
       switch (arg) {
         case 'chat':
           roomType = ChatRoom
           break
+
+        case 'draw':
+          roomType = DrawRoom
       }
     }
-    const content = (contentFunctions as any)[roomType.nicename]
 
+    const content = (contentFunctions as any)[roomType.nicename]
     const update = (room: GameRoom) => {
       embedMessage.edit(buildEmbed(room, content))
     }

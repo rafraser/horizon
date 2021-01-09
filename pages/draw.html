@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Draw Room</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+      }
+
+      #container {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+      }
+
+      canvas {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+
+        display: block;
+        margin: 0 auto;
+        height: 95%;
+        border: 1px solid black;
+      }
+
+      .palette-color {
+        background-color: red;
+        width: 64px;
+        height: 64px;
+        border-radius: 8px;
+        float: right;
+        margin: 6px;
+      }
+
+      .palette-color:nth-child(2n) {
+        clear: both;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container">
+      <canvas id="drawing" width="1024" height="1024"></canvas>
+    </div>
+  </body>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    var parts = window.location.href.split('/');
+    var roomId = parts.pop() || parts.pop();
+    var socket = io("/" + roomId);
+
+    var canvas = document.getElementById('drawing')
+    var ctx = canvas.getContext('2d')
+    var isDrawing = false
+    var current = { color: 0 }
+    var palette = ["black"]
+
+    canvas.addEventListener('mousedown', onMouseDown, false)
+    canvas.addEventListener('mouseup', onMouseUp, false)
+    canvas.addEventListener('mouseout', onMouseUp, false)
+    canvas.addEventListener('mousemove', throttleDrawing(onMouseMove, 20), false)
+
+    function getPosition(e) {
+      var rect = canvas.getBoundingClientRect()
+      var x = e.offsetX * canvas.width / canvas.clientWidth | 0
+      var y = e.offsetY * canvas.height / canvas.clientHeight | 0
+      return [x, y]
+    }
+
+    function onMouseDown(e) {
+      isDrawing = true
+
+      var p = getPosition(e)
+      current.x = p[0]
+      current.y = p[1]
+    }
+
+    function onMouseUp(e) {
+      if(!isDrawing) return
+
+      isDrawing = false
+      var p = getPosition(e)
+      draw(current.x, current.y, p[0], p[1], current.color)
+    }
+
+    function onMouseMove(e) {
+      if(!isDrawing) return
+
+      var p = getPosition(e)
+      draw(current.x, current.y, p[0], p[1], current.color)
+      current.x = p[0]
+      current.y = p[1]
+    }
+
+    function throttleDrawing(callback, delay) {
+      var previous = new Date().getTime()
+      return function() {
+        var time = new Date().getTime()
+        if ((time - previous) >= delay) {
+          previous = time
+          callback.apply(null, arguments)
+        }
+      }
+    }
+
+    function draw(x0, y0, x1, y1, color) {
+      // Draw on our canvas
+      ctx.beginPath()
+      ctx.moveTo(x0, y0)
+      ctx.lineTo(x1, y1)
+      ctx.strokeStyle = palette[color]
+      ctx.lineWidth = 4
+      ctx.stroke()
+      ctx.closePath()
+
+      socket.emit('drawing', {
+        x0: x0,
+        y0: y0,
+        x1: x1,
+        y1: y1,
+        color: color,
+      })
+    }
+
+    function updateColor(e) {
+      console.log(e)
+      var color = parseInt(e.target.id.split("-")[1])
+      current.color = color
+    }
+
+    function buildPalette(colors) {
+      palette = colors
+
+      var container = document.getElementById("container")
+      console.log(colors)
+      for(var i = 0; i < colors.length; i++) {
+        var box = document.createElement("div")
+        box.style.backgroundColor = colors[i]
+        box.classList.add("palette-color")
+        box.id = "color-" + i
+        box.addEventListener('click', updateColor, false)
+        container.appendChild(box)
+        console.log(box)
+      }
+    }
+    socket.on('palette', buildPalette)
+
+    socket.on('drawing', function(data) {
+      draw(data.x0, data.y0, data.x1, data.y1, data.color)
+    })
+
+    socket.on('connect_error', function(e) {
+      console.error(e)
+    });
+  </script>
+</html>
