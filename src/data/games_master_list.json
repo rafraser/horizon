@@ -1,0 +1,86 @@
+{
+    "nonsteam_games": {
+        "minecraft": {
+            "display_name": "Minecraft",
+            "tags": [
+                "sandbox"
+            ]
+        }
+    },
+    "steam_games": {
+        "440": {
+            "display_name": "Team Fortress 2",
+            "tags": [
+                "casual",
+                "coop"
+            ]
+        },
+        "730": {
+            "display_name": "Counter-Strike: Global Offensive",
+            "tags": [
+                "competitive",
+                "casual",
+                "coop"
+            ]
+        },
+        "4000": {
+            "display_name": "Garry's Mod",
+            "max_players": 2,
+            "min_players": 2,
+            "owner_only": true,
+            "tags": [
+                "sandbox"
+            ]
+        },
+        "8930": {
+            "display_name": "Civ 5",
+            "tags": [
+                "comp",
+                "strat"
+            ]
+        },
+        "105600": {
+            "display_name": "Terraria",
+            "tags": [
+                "sandbox"
+            ]
+        },
+        "211820": {
+            "display_name": "Starbound",
+            "tags": [
+                "sandbox"
+            ]
+        },
+        "268500": {
+            "display_name": "XCOM 2",
+            "max_players": 2,
+            "min_players": 2,
+            "tags": [
+                "comp",
+                "strat"
+            ]
+        },
+        "394690": {
+            "display_name": "Tower Unite",
+            "tags": [
+                "sandbox",
+                "casual"
+            ]
+        },
+        "602960": {
+            "display_name": "Barotrauma",
+            "tags": [
+                "sandbox"
+            ]
+        },
+        "823130": {
+            "display_name": "Totally Accurate Battle Grounds",
+            "max_players": 4,
+            "min_players": 2,
+            "tags": [
+                "comp",
+                "shooter"
+            ]
+        }
+    }
+}
