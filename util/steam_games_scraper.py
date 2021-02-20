@@ -31,7 +31,7 @@ def save_to_json(directory: str, steamid: str, user_data: dict):
         json.dump(user_data, f)
 
 
-def get_appid_list(content: str) -> list[str]:
+def get_appid_list(content: str):
     """Extract a list of owned AppIDs from a page
 
     Args:
@@ -100,6 +100,8 @@ def scrape_id(steamid: str, output: str, valid_game_ids):
 def main(args):
     valid_game_ids = load_master_games_list()
     users = load_discord_link_list() if args.all else args.users
+    if not users:
+        return
 
     for user in users:
         scrape_id(user, args.output, valid_game_ids)
