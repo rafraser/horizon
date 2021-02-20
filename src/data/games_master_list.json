@@ -208,10 +208,304 @@
         },
         "1310510": {
             "display_name": "Handy Harry's Haunted House Services",
-            "max_players": 10,
+            "max_players": 8,
             "tags": [
                 "coop",
                 "horror"
+            ]
+        },
+        "967050": {
+            "display_name": "Pacify",
+            "max_players": 4,
+            "tags": [
+                "coop",
+                "horror"
+            ]
+        },
+        "1012560": {
+            "display_name": "Snakeybus",
+            "tags": [
+                "versus"
+            ]
+        },
+        "282800": {
+            "display_name": "100% Orange Juice",
+            "tags": [
+                "board",
+                "versus"
+            ]
+        },
+        "700330": {
+            "display_name": "SCP: Secret Laboratory",
+            "tags": [
+                "versus",
+                "horror"
+            ]
+        },
+        "865360": {
+            "display_name": "We Were Here Together",
+            "tags": [
+                "coop",
+                "puzzle"
+            ]
+        },
+        "326460": {
+            "display_name": "Shellshock Live",
+            "tags": [
+                "versus"
+            ]
+        },
+        "362890": {
+            "display_name": "Black Mesa",
+            "tags": [
+                "versus",
+                "shooter"
+            ]
+        },
+        "275850": {
+            "display_name": "No Man's Sky",
+            "tags": [
+                "coop",
+                "sandbox"
+            ]
+        },
+        "620": {
+            "display_name": "Portal 2",
+            "tags": [
+                "coop",
+                "puzzle"
+            ],
+            "max_players": 2
+        },
+        "383790": {
+            "display_name": "The Ship: Remasted",
+            "tags": [
+                "versus"
+            ]
+        },
+        "602770": {
+            "display_name": "Clatter",
+            "tags": [
+                "versus"
+            ]
+        },
+        "613730": {
+            "display_name": "Need For Drink",
+            "tags": [
+                "versus"
+            ],
+            "max_players": 2
+        },
+        "548430": {
+            "display_name": "Deep Rock Galactic",
+            "tags": [
+                "coop",
+                "shooter"
+            ],
+            "max_players": 4
+        },
+        "271590": {
+            "display_name": "Grand Theft Auto V",
+            "tags": [
+                "coop"
+            ],
+            "max_players": 4
+        },
+        "49520": {
+            "display_name": "Borderlands 2",
+            "tags": [
+                "coop",
+                "shooter"
+            ],
+            "max_players": 4
+        },
+        "960090": {
+            "display_name": "Bloons TD 6",
+            "tags": [
+                "coop",
+                "towerdefense"
+            ],
+            "max_players": 2
+        },
+        "8980": {
+            "display_name": "Borderlands",
+            "tags": [
+                "coop",
+                "shooter"
+            ],
+            "max_players": 4
+        },
+        "210770": {
+            "display_name": "Sanctum 2",
+            "tags": [
+                "coop",
+                "towerdefense"
+            ]
+        },
+        "246900": {
+            "display_name": "Viscera Cleanup Detail",
+            "tags": [
+                "coop",
+                "casual"
+            ]
+        },
+        "638070": {
+            "display_name": "Murderous Pursuits",
+            "tags": [
+                "versus"
+            ]
+        },
+        "359550": {
+            "display_name": "Tom Clancy's Rainbow Six Siege",
+            "tags": [
+                "shooter",
+                "competitive"
+            ]
+        },
+        "252950": {
+            "display_name": "Rocket League",
+            "tags": [
+                "versus"
+            ]
+        },
+        "312660": {
+            "display_name": "Sniper Elite 4",
+            "tags": [
+                "coop",
+                "shooter"
+            ],
+            "max_players": 4
+        },
+        "286160": {
+            "display_name": "Tabletop Simulator",
+            "tags": [
+                "board",
+                "versus"
+            ]
+        },
+        "306020": {
+            "display_name": "Bloons TD5",
+            "tags": [
+                "coop",
+                "towerdefense"
+            ],
+            "max_players": 2
+        },
+        "429780": {
+            "display_name": "Bunny Hop League",
+            "tags": [
+                "versus"
+            ]
+        },
+        "332310": {
+            "display_name": "Lego Worlds",
+            "tags": [
+                "coop",
+                "sandbox"
+            ]
+        },
+        "677160": {
+            "display_name": "We Were Here Too",
+            "tags": [
+                "coop",
+                "puzzle"
+            ],
+            "max_players": 2
+        },
+        "219830": {
+            "display_name": "King Arthur's Gold",
+            "tags": [
+                "versus"
+            ]
+        },
+        "42910": {
+            "display_name": "Magicka",
+            "tags": [
+                "coop"
+            ],
+            "max_players": 4
+        },
+        "238370": {
+            "display_name": "Magicka 2",
+            "tags": [
+                "coop"
+            ],
+            "max_players": 4
+        },
+        "582500": {
+            "display_name": "We Were Here",
+            "tags": [
+                "coop",
+                "puzzle"
+            ],
+            "max_players": 2
+        },
+        "490450": {
+            "display_name": "Tokyo 42",
+            "tags": [
+                "versus"
+            ]
+        },
+        "207140": {
+            "display_name": "Speedrunners",
+            "tags": [
+                "versus"
+            ],
+            "max_players": 4
+        },
+        "22600": {
+            "display_name": "Worms Reloaded",
+            "tags": [
+                "versus"
+            ]
+        },
+        "244850": {
+            "display_name": "Space Engineers",
+            "tags": [
+                "coop",
+                "sandbox"
+            ]
+        },
+        "244770": {
+            "display_name": "StarMade",
+            "tags": [
+                "coop",
+                "sandbox"
+            ]
+        },
+        "222880": {
+            "display_name": "Insurgency",
+            "tags": [
+                "versus",
+                "shooter"
+            ]
+        },
+        "91600": {
+            "display_name": "Sanctum",
+            "tags": [
+                "coop",
+                "towerdefense"
+            ]
+        },
+        "322330": {
+            "display_name": "Don't Starve Together",
+            "tags": [
+                "coop",
+                "survival"
+            ]
+        },
+        "108200": {
+            "display_name": "Ticket To Ride",
+            "tags": [
+                "board",
+                "versus"
+            ]
+        },
+        "581320": {
+            "display_name": "Insurgency: Sandstorm",
+            "tags": [
+                "versus",
+                "shooter"
             ]
         }
     }

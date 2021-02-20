@@ -69,11 +69,11 @@ export default {
     const sortedGames = gamesWithNiceNames.sort((a: any, b: any) => {
       if (a[2] === b[2]) {
         // Sort by name if same number of owners
-        return a[1].localeCompare(b)
+        return a[1].localeCompare(b[1])
       } else {
         return b[2] - a[2]
       }
-    }).slice(0, 5)
+    }).slice(0, 8)
 
     // Make a nice embed
     const embed = new MessageEmbed()
