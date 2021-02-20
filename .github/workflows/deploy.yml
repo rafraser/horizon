@@ -32,5 +32,5 @@ jobs:
             cd horizon
             git pull
             npm install
+            npm run scrape-games3
             npm run build
-            npm run scrape-games

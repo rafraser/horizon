@@ -8,7 +8,8 @@
     "start": "node dist/main.js",
     "build-start": "npm run build && npm run start",
     "lint": "npx eslint --fix --ext .ts src",
-    "scrape-games": "python ./util/steam_games_scraper.py -all && python ./util/download_game_icons.py"
+    "scrape-games": "python ./util/steam_games_scraper.py -all && python ./util/download_game_icons.py",
+    "scrape-games3": "python3 ./util/steam_games_scraper.py -all && python3 ./util/download_game_icons.py"
   },
   "repository": {
     "type": "git",
