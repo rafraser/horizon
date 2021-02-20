@@ -11,32 +11,52 @@
         "440": {
             "display_name": "Team Fortress 2",
             "tags": [
-                "casual",
-                "coop"
+                "competitive",
+                "coop",
+                "versus"
+            ]
+        },
+        "570": {
+            "display_name": "Dota 2",
+            "tags": [
+                "coop",
+                "versus",
+                "competitive",
+                "moba"
             ]
         },
         "730": {
             "display_name": "Counter-Strike: Global Offensive",
             "tags": [
-                "competitive",
-                "casual",
-                "coop"
+                "versus",
+                "coop",
+                "competitive"
             ]
         },
         "4000": {
             "display_name": "Garry's Mod",
-            "max_players": 2,
-            "min_players": 2,
-            "owner_only": true,
             "tags": [
-                "sandbox"
+                "sandbox",
+                "mainstream"
             ]
         },
         "8930": {
-            "display_name": "Civ 5",
+            "display_name": "Civilization V",
             "tags": [
-                "comp",
+                "versus",
                 "strat"
+            ]
+        },
+        "17520": {
+            "display_name": "Synergy",
+            "tags": [
+                "coop"
+            ]
+        },
+        "70600": {
+            "display_name": "Worms Ultimate Mayhem",
+            "tags": [
+                "versus"
             ]
         },
         "105600": {
@@ -51,13 +71,46 @@
                 "sandbox"
             ]
         },
+        "218620": {
+            "display_name": "Payday 2",
+            "tags": [
+                "coop",
+                "shooter"
+            ]
+        },
+        "238430": {
+            "display_name": "Contagion",
+            "tags": [
+                "coop",
+                "shooter"
+            ]
+        },
+        "250340": {
+            "display_name": "Blockland",
+            "tags": [
+                "sandbox"
+            ]
+        },
         "268500": {
             "display_name": "XCOM 2",
             "max_players": 2,
-            "min_players": 2,
             "tags": [
-                "comp",
+                "versus",
                 "strat"
+            ]
+        },
+        "270450": {
+            "display_name": "Stardew Valley",
+            "tags": [
+                "versus",
+                "casual"
+            ]
+        },
+        "323850": {
+            "display_name": "Move or Die",
+            "tags": [
+                "party",
+                "versus"
             ]
         },
         "394690": {
@@ -67,19 +120,98 @@
                 "casual"
             ]
         },
+        "413150": {
+            "display_name": "Stardew Valley",
+            "tags": [
+                "coop",
+                "casual"
+            ]
+        },
+        "431240": {
+            "display_name": "Golf With Your Friends",
+            "tags": [
+                "versus",
+                "golf"
+            ]
+        },
         "602960": {
             "display_name": "Barotrauma",
             "tags": [
                 "sandbox"
             ]
         },
+        "650220": {
+            "display_name": "Interplanetary: Enhanced Edition",
+            "tags": [
+                "versus",
+                "strategy"
+            ]
+        },
+        "739630": {
+            "display_name": "Phasmophobia",
+            "tags": [
+                "coop",
+                "horror"
+            ]
+        },
+        "765410": {
+            "display_name": "Bean Battles",
+            "tags": [
+                "versus",
+                "shooter"
+            ]
+        },
         "823130": {
             "display_name": "Totally Accurate Battle Grounds",
             "max_players": 4,
-            "min_players": 2,
             "tags": [
-                "comp",
+                "versus",
                 "shooter"
+            ]
+        },
+        "914260": {
+            "display_name": "HALF DEAD 2",
+            "tags": [
+                "coop"
+            ]
+        },
+        "945360": {
+            "display_name": "Among Us",
+            "max_players": 10,
+            "min_players": 5,
+            "tags": [
+                "party",
+                "coop"
+            ]
+        },
+        "976730": {
+            "display_name": "Halo: The Master Chief Collection",
+            "tags": [
+                "versus",
+                "shooter"
+            ]
+        },
+        "1016920": {
+            "display_name": "Unrailed!",
+            "max_players": 4,
+            "tags": [
+                "coop",
+                "casual"
+            ]
+        },
+        "1097150": {
+            "display_name": "Fall Guys: Ultimate Knockout",
+            "tags": [
+                "party",
+                "battle royale"
+            ]
+        },
+        "1310510": {
+            "display_name": "Handy Harry's Haunted House Services",
+            "max_players": 10,
+            "tags": [
+                "coop",
+                "horror"
             ]
         }
     }

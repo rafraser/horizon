@@ -69,7 +69,7 @@ export default {
     const sortedGames = gamesWithNiceNames.sort((a: any, b: any) => {
       if (a[2] === b[2]) {
         // Sort by name if same number of owners
-        return a[1] - b[1]
+        return a[1].localeCompare(b)
       } else {
         return b[2] - a[2]
       }
