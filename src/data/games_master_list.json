@@ -5,6 +5,20 @@
             "tags": [
                 "sandbox"
             ]
+        },
+        "overwatch": {
+            "display_name": "Overwatch",
+            "tags": [
+                "verus",
+                "shooter"
+            ]
+        },
+        "league": {
+            "display_name": "League of Legends",
+            "tags": [
+                "moba",
+                "versus"
+            ]
         }
     },
     "steam_games": {
@@ -44,6 +58,13 @@
                 "versus"
             ]
         },
+        "550": {
+            "display_name": "Left 4 Dead",
+            "tags": [
+                "coop",
+                "shooter"
+            ]
+        },
         "570": {
             "display_name": "Dota 2",
             "tags": [
@@ -67,6 +88,13 @@
                 "versus",
                 "coop",
                 "competitive"
+            ]
+        },
+        "1250": {
+            "display_name": "Killing Floor",
+            "tags": [
+                "coop",
+                "shooter"
             ]
         },
         "4000": {
@@ -215,6 +243,13 @@
                 "shooter"
             ]
         },
+        "232090": {
+            "display_name": "Killing Floor 2",
+            "tags": [
+                "versus",
+                "shooter"
+            ]
+        },
         "238370": {
             "display_name": "Magicka 2",
             "max_players": 4,
@@ -268,6 +303,14 @@
                 "versus"
             ]
         },
+        "261640": {
+            "display_name": "Borderlands: The Pre-Sequel",
+            "max_players": 4,
+            "tags": [
+                "coop",
+                "shooter"
+            ]
+        },
         "268500": {
             "display_name": "XCOM 2",
             "max_players": 2,
@@ -308,6 +351,13 @@
             "display_name": "Tabletop Simulator",
             "tags": [
                 "board",
+                "versus"
+            ]
+        },
+        "291550": {
+            "display_name": "Brawlhalla",
+            "tags": [
+                "fighting",
                 "versus"
             ]
         },
@@ -376,7 +426,7 @@
             ]
         },
         "383790": {
-            "display_name": "The Ship: Remasted",
+            "display_name": "The Ship: Remastered",
             "tags": [
                 "versus"
             ]
@@ -386,6 +436,14 @@
             "tags": [
                 "sandbox",
                 "casual"
+            ]
+        },
+        "397540": {
+            "display_name": "Borderlands 3",
+            "max_players": 4,
+            "tags": [
+                "coop",
+                "shooter"
             ]
         },
         "413150": {
@@ -406,6 +464,12 @@
             "tags": [
                 "versus",
                 "golf"
+            ]
+        },
+        "470220": {
+            "display_name": "UNO",
+            "tags": [
+                "board"
             ]
         },
         "490450": {
