@@ -49,7 +49,7 @@ function makeEmbedFromPage (gamesPage: any[], currentPage: number, maxPage: numb
     .setTitle('Best Games')
     .setColor('#1B9CFC')
     .setThumbnail(`https://horizon.sealion.space/img/games/${gamesPage[0][0]}.png`)
-    .setFooter(`Page ${currentPage}/${maxPage}`)
+    .setFooter(`Page ${currentPage + 1}/${maxPage}`)
 
   for (const game of gamesPage) {
     embed.addField(game[1], `${game[2]} owners`)
@@ -70,18 +70,25 @@ export default {
 
     // Process any special arguments (TBD)
 
-    // Get a list of lists of owned Steam games
-    const userGamesList = await Promise.all(args.map(async arg => await loadUserGamesData(message, arg)))
-    const allGamesWithRepeats = [].concat(...userGamesList.filter(e => e != null))
+    // List of lists of owned Steam games
+    const gamesList = await Promise.all(args.map(async arg => await loadUserGamesData(message, arg)))
+    const gamesFlattened = [].concat(...gamesList.filter(e => e != null))
 
-    // Count how many people own each game
-    const allGamesCounted : object = allGamesWithRepeats.reduce((counter, game) => {
+    const gamesCounted : Record<string, number> = gamesFlattened.reduce((counter, game) => {
       counter[game] = (counter[game] || 0) + 1
       return counter
     }, {})
 
+    // Remove any games with only one occurence
+    const filteredCount = Object.keys(gamesCounted)
+      .filter(key => gamesCounted[key] > 1)
+      .reduce((obj : Record<string, number>, key) => {
+        obj[key] = gamesCounted[key]
+        return obj
+      }, {})
+
     // Sort the games by owners
-    const gamesWithNiceNames = Object.entries(allGamesCounted).map((game: any) => [game[0], gameNameFromId(game[0]), game[1]])
+    const gamesWithNiceNames = Object.entries(filteredCount).map((game: any) => [game[0], gameNameFromId(game[0]), game[1]])
     const sortedGames = gamesWithNiceNames.sort((a: any, b: any) => {
       if (a[2] === b[2]) {
         // Sort by name if same number of owners
