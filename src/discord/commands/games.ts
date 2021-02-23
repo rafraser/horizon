@@ -4,6 +4,7 @@ import discordLink from '../../data/temp_discord_link.json'
 import gamesMasterList from '../../data/games_master_list.json'
 import { promises } from 'fs'
 import path from 'path'
+import { sendPaginatedEmbed } from '../pagination'
 
 async function findUser (message: Message, arg: string) {
   // Fetch the guild members if it's not cached for some reason
@@ -42,6 +43,21 @@ function gameNameFromId (id: string) {
   return (gamesMasterList as any).steam_games[id].display_name
 }
 
+function makeEmbedFromPage (gamesPage: any[], currentPage: number, maxPage: number): MessageEmbed {
+  // Make a nice embed
+  const embed = new MessageEmbed()
+    .setTitle('Best Games')
+    .setColor('#1B9CFC')
+    .setThumbnail(`https://horizon.sealion.space/img/games/${gamesPage[0][0]}.png`)
+    .setFooter(`Page ${currentPage}/${maxPage}`)
+
+  for (const game of gamesPage) {
+    embed.addField(game[1], `${game[2]} owners`)
+  }
+
+  return embed
+}
+
 export default {
   name: 'games',
   description: 'Check a list of games in common between users',
@@ -73,19 +89,13 @@ export default {
       } else {
         return b[2] - a[2]
       }
-    }).slice(0, 8)
+    })
 
-    // Make a nice embed
-    const embed = new MessageEmbed()
-      .setTitle('Best Games')
-      .setColor('#1B9CFC')
-      .setThumbnail(`https://horizon.sealion.space/img/games/${sortedGames[0][0]}.png`)
-
-    for (const game of sortedGames) {
-      embed.addField(game[1], `${game[2]} owners`)
-    }
+    const pageSize = 8
+    const paged = [...Array(Math.ceil(sortedGames.length / pageSize))].map(_ => sortedGames.splice(0, pageSize))
+    const embedPages = paged.map((curr, idx) => makeEmbedFromPage(curr, idx, paged.length))
 
     // Return list of top games, with how many users
-    await message.channel.send(embed)
+    await sendPaginatedEmbed(message, embedPages)
   }
 }
