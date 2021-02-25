@@ -6,6 +6,17 @@ import { promises } from 'fs'
 import path from 'path'
 import { sendPaginatedEmbed } from '../pagination'
 
+/* eslint-disable */
+type GameInfo = {
+  id?: string
+  display_name: string
+  tags: string[]
+  min_players?: number
+  max_players?: number
+  owners?: number
+}
+/* eslint-enable */
+
 async function findUser (message: Message, arg: string): Promise<GuildMember> {
   // Fetch the guild members if it's not cached for some reason
   if (message.guild.members.cache.size <= 2) {
@@ -51,6 +62,20 @@ function processArgs (args: string[]): {mode: string, tags: string[], userArgs: 
   return options
 }
 
+function gameFromID (gameID: string) {
+  const steamGame = (gamesMasterList.steam_games as Record<string, GameInfo>)[gameID]
+  if (steamGame) {
+    steamGame.id = gameID
+    return steamGame
+  } else {
+    const nonSteamGame = (gamesMasterList.nonsteam_games as Record<string, GameInfo>)[gameID]
+    if (nonSteamGame) {
+      nonSteamGame.id = gameID
+      return nonSteamGame
+    }
+  }
+}
+
 function userToSteamID (user: GuildMember): string {
   return (discordLink as Record<string, string>)[user.id]
 }
@@ -58,37 +83,45 @@ function userToSteamID (user: GuildMember): string {
 async function loadUserGamesData (steamID: string): Promise<string[]> {
   try {
     const gameData = JSON.parse(await promises.readFile(path.join('./owned_games', steamID) + '.json', 'utf8'))
-    return gameData.steam_games
+    return gameData.steam_games.concat(gameData.nonsteam_games)
   } catch (e) {
     return null
   }
 }
 
-async function loadGameCounts (steamIDs: string[]): Promise<Record<string, number>> {
+async function loadGameInfo (steamIDs: string[]): Promise<GameInfo[]> {
   // List of lists of owned Steam games
   const gamesList = await Promise.all(steamIDs.map(loadUserGamesData))
-  const gamesFlattened = [].concat(...gamesList.filter(e => e != null))
+  const gamesFlattened : string[] = [].concat(...gamesList.filter(e => e != null))
 
-  return gamesFlattened.reduce((counter, game) => {
+  // Count up the games
+  const gameCounts = gamesFlattened.reduce((counter, game) => {
     counter[game] = (counter[game] || 0) + 1
     return counter
-  }, {})
+  }, {} as Record<string, number>)
+
+  // Convert to array of game data
+  return Object.entries(gameCounts).map(([gameID, count]) => {
+    const game = gameFromID(gameID)
+    if (game) {
+      game.owners = count
+      return game
+    } else {
+      return null
+    }
+  }).filter(e => e != null && e.owners > 1)
 }
 
-function gameNameFromId (id: string) {
-  return (gamesMasterList as any).steam_games[id].display_name
-}
-
-function makeEmbedFromPage (gamesPage: any[], currentPage: number, maxPage: number): MessageEmbed {
+function makeEmbedFromPage (gamesPage: GameInfo[], currentPage: number, maxPage: number): MessageEmbed {
   // Make a nice embed
   const embed = new MessageEmbed()
     .setTitle('Best Games')
     .setColor('#1B9CFC')
-    .setThumbnail(`https://horizon.sealion.space/img/games/${gamesPage[0][0]}.png`)
+    .setThumbnail(`https://horizon.sealion.space/img/games/${gamesPage[0].id}.png`)
     .setFooter(`Page ${currentPage + 1}/${maxPage}`)
 
   for (const game of gamesPage) {
-    embed.addField(game[1], `${game[2]} owners`)
+    embed.addField(game.display_name, `${game.owners} owners`)
   }
 
   return embed
@@ -127,18 +160,11 @@ export default {
       return
     }
 
-    // Build the games counts
-    const gamesCounted = await loadGameCounts(steamIDs)
-
-    // Remove any games with only one occurence
-    const filteredCount = Object.keys(gamesCounted)
-      .filter(key => gamesCounted[key] > 1)
-      .reduce((obj : Record<string, number>, key) => {
-        obj[key] = gamesCounted[key]
-        return obj
-      }, {})
+    // Fetch the game data
+    const gameData = await loadGameInfo(steamIDs)
 
     // Sort the games by owners
+    /*
     const gamesWithNiceNames = Object.entries(filteredCount).map((game: any) => [game[0], gameNameFromId(game[0]), game[1]])
     const sortedGames = gamesWithNiceNames.sort((a: any, b: any) => {
       if (a[2] === b[2]) {
@@ -148,6 +174,9 @@ export default {
         return b[2] - a[2]
       }
     })
+    */
+    const sortedGames = gameData
+    console.log(sortedGames)
 
     const pageSize = 8
     const paged = [...Array(Math.ceil(sortedGames.length / pageSize))].map(_ => sortedGames.splice(0, pageSize))
