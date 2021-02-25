@@ -1,19 +1,25 @@
 import { Message, MessageEmbed, MessageReaction, User } from 'discord.js'
 
-export async function sendPaginatedEmbed (message: Message, pages: MessageEmbed[]) {
-  const pageEmojis = ['⏪', '⏩']
+export async function sendPaginatedEmbed (message: Message, pages: MessageEmbed[], time = 60000, pageEmojis: ['⏪', '⏩']) {
   let currentPage = 0
 
   const embedMessage = await message.channel.send(pages[currentPage])
+  if (pages.length <= 1) {
+    // Don't need to handle any fancy pagination stuff
+    // if we only have one page
+    return
+  }
+
+  // Add the page buttons & listen up for reactions
   await embedMessage.react(pageEmojis[0])
   await embedMessage.react(pageEmojis[1])
-
   const reactionCollector = embedMessage.createReactionCollector(
     (reaction, user) => {
       return pageEmojis.includes(reaction.emoji.name) && !user.bot
-    }, { time: 60000 }
+    }, { time: time }
   )
 
+  // Handle reaction clicks
   reactionCollector.on('collect', async (reaction: MessageReaction, user: User) => {
     await reaction.users.remove(user)
 
