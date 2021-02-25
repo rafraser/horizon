@@ -5,6 +5,7 @@ import gamesMasterList from '../../data/games_master_list.json'
 import { promises } from 'fs'
 import path from 'path'
 import { sendPaginatedEmbed } from '../pagination'
+import { SearchOptions, createSearchOptions } from '../utils'
 
 /* eslint-disable */
 type GameInfo = {
@@ -16,58 +17,6 @@ type GameInfo = {
   owners?: number
 }
 /* eslint-enable */
-
-type SearchOptions = {
-  mode: string
-  tags: string[]
-  userArgs: string[]
-}
-
-async function findUser (message: Message, arg: string): Promise<GuildMember> {
-  // Fetch the guild members if it's not cached for some reason
-  if (message.guild.members.cache.size <= 2) {
-    await message.guild.members.fetch()
-  }
-
-  // Search the list of users for matching names
-  const search = arg.toLowerCase()
-  const results = message.guild.members.cache.filter(u => {
-    return u.displayName.toLowerCase().includes(search) ||
-            u.user.username.toLowerCase().includes(search) ||
-            u.user.tag.toLowerCase() === search
-  })
-
-  return results ? results.first() : null
-}
-
-function processArgs (args: string[]): SearchOptions {
-  const options = {
-    mode: 'default',
-    tags: [] as string[],
-    userArgs: [] as string[]
-  }
-
-  for (const arg of args) {
-    const split = arg.split(':')
-    if (split.length <= 1) {
-      options.userArgs.push(arg)
-    } else {
-      // Process special args
-      switch (split[0]) {
-        case 'tag':
-          options.tags.push(split[1])
-          break
-
-        case 'sort':
-          options.mode = split[1].toLowerCase()
-          break
-      }
-    }
-  }
-
-  options.tags.map(tag => tag.toLowerCase())
-  return options
-}
 
 function gameFromID (gameID: string) {
   const steamGame = (gamesMasterList.steam_games as Record<string, GameInfo>)[gameID]
@@ -119,12 +68,14 @@ async function loadGameInfo (steamIDs: string[]): Promise<GameInfo[]> {
   }).filter(e => e != null && e.owners > 1)
 }
 
-function filterGames (games: GameInfo[], options: SearchOptions) {
-  return games.filter(game => options.tags.every(tag => game.tags.includes(tag)))
+function filterGames (games: GameInfo[], options: SearchOptions, playerCount: number) {
+  games = games.filter(game => (game.max_players || 100) >= playerCount && (game.min_players || 2) <= playerCount)
+  games = games.filter(game => options.tags.every(tag => game.tags.includes(tag)))
+  return games
 }
 
 function sortGames (games: GameInfo[], options: SearchOptions): GameInfo[] {
-  switch (options.mode) {
+  switch (options.keyed.search || 'default') {
     case 'alphabetical':
       return games.sort((a, b) => a.display_name.localeCompare(b.display_name))
 
@@ -169,17 +120,17 @@ export default {
 
   async execute (client: HorizonClient, message: Message, args: string[]) {
     // Parse options from args
-    const options = processArgs(args)
-    if (options.userArgs.length <= 1) {
+    const options = await createSearchOptions(message, args)
+    if (options.users.length <= 1) {
       await message.channel.send('I need at least two users to work with!')
       return
     }
 
     // Condense users (reporting anyone who we couldn't find)
-    let users = await Promise.all(options.userArgs.map(async arg => await findUser(message, arg)))
+    let users = options.users
     const emptyUserIndexes = users.map((e, i) => e ? null : i).filter(x => x !== null)
     if (emptyUserIndexes.length > 0) {
-      const emptyUsers = emptyUserIndexes.map(idx => options.userArgs[idx])
+      const emptyUsers = emptyUserIndexes.map(idx => options.users[idx])
       await message.channel.send(`I couldn't find: ${emptyUsers.join(', ')}`)
     }
     users = users.filter(x => x !== null)
@@ -198,8 +149,14 @@ export default {
 
     // Fetch the game data
     let gameData = await loadGameInfo(steamIDs)
-    gameData = filterGames(gameData, options)
+    gameData = filterGames(gameData, options, steamIDs.length)
     gameData = sortGames(gameData, options)
+
+    // Handle case where there's nothing in common
+    if (gameData.length < 1) {
+      await message.channel.send("Couldn't find any games in common! Try making a less restrictive search?")
+      return
+    }
 
     // Paginate
     const pageSize = 8
