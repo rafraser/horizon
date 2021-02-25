@@ -17,6 +17,12 @@ type GameInfo = {
 }
 /* eslint-enable */
 
+type SearchOptions = {
+  mode: string
+  tags: string[]
+  userArgs: string[]
+}
+
 async function findUser (message: Message, arg: string): Promise<GuildMember> {
   // Fetch the guild members if it's not cached for some reason
   if (message.guild.members.cache.size <= 2) {
@@ -34,7 +40,7 @@ async function findUser (message: Message, arg: string): Promise<GuildMember> {
   return results ? results.first() : null
 }
 
-function processArgs (args: string[]): {mode: string, tags: string[], userArgs: string[]} {
+function processArgs (args: string[]): SearchOptions {
   const options = {
     mode: 'default',
     tags: [] as string[],
@@ -49,16 +55,17 @@ function processArgs (args: string[]): {mode: string, tags: string[], userArgs: 
       // Process special args
       switch (split[0]) {
         case 'tag':
-          options.tags.push(split[0])
+          options.tags.push(split[1])
           break
 
-        case 'mode':
-          options.mode = split[1]
+        case 'sort':
+          options.mode = split[1].toLowerCase()
           break
       }
     }
   }
 
+  options.tags.map(tag => tag.toLowerCase())
   return options
 }
 
@@ -112,6 +119,35 @@ async function loadGameInfo (steamIDs: string[]): Promise<GameInfo[]> {
   }).filter(e => e != null && e.owners > 1)
 }
 
+function filterGames (games: GameInfo[], options: SearchOptions) {
+  return games.filter(game => options.tags.every(tag => game.tags.includes(tag)))
+}
+
+function sortGames (games: GameInfo[], options: SearchOptions): GameInfo[] {
+  switch (options.mode) {
+    case 'alphabetical':
+      return games.sort((a, b) => a.display_name.localeCompare(b.display_name))
+
+    case 'random':
+      return games.sort((a, b) => {
+        if (a.owners === b.owners) {
+          return 0.5 - Math.random()
+        } else {
+          return b.owners - a.owners
+        }
+      })
+
+    default:
+      return games.sort((a, b) => {
+        if (a.owners === b.owners) {
+          return a.display_name.localeCompare(b.display_name)
+        } else {
+          return b.owners - a.owners
+        }
+      })
+  }
+}
+
 function makeEmbedFromPage (gamesPage: GameInfo[], currentPage: number, maxPage: number): MessageEmbed {
   // Make a nice embed
   const embed = new MessageEmbed()
@@ -161,28 +197,14 @@ export default {
     }
 
     // Fetch the game data
-    const gameData = await loadGameInfo(steamIDs)
+    let gameData = await loadGameInfo(steamIDs)
+    gameData = filterGames(gameData, options)
+    gameData = sortGames(gameData, options)
 
-    // Sort the games by owners
-    /*
-    const gamesWithNiceNames = Object.entries(filteredCount).map((game: any) => [game[0], gameNameFromId(game[0]), game[1]])
-    const sortedGames = gamesWithNiceNames.sort((a: any, b: any) => {
-      if (a[2] === b[2]) {
-        // Sort by name if same number of owners
-        return a[1].localeCompare(b[1])
-      } else {
-        return b[2] - a[2]
-      }
-    })
-    */
-    const sortedGames = gameData
-    console.log(sortedGames)
-
+    // Paginate
     const pageSize = 8
-    const paged = [...Array(Math.ceil(sortedGames.length / pageSize))].map(_ => sortedGames.splice(0, pageSize))
+    const paged = [...Array(Math.ceil(gameData.length / pageSize))].map(_ => gameData.splice(0, pageSize))
     const embedPages = paged.map((curr, idx) => makeEmbedFromPage(curr, idx, paged.length))
-
-    // Return list of top games, with how many users
     await sendPaginatedEmbed(message, embedPages)
   }
 }
