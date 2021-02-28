@@ -268,7 +268,8 @@
             "display_name": "Battleblock Theater",
             "tags": [
                 "coop"
-            ]
+            ],
+            "max_players": 2
         },
         "244770": {
             "display_name": "StarMade",
@@ -324,7 +325,8 @@
             "tags": [
                 "versus",
                 "casual"
-            ]
+            ],
+            "max_players": 4
         },
         "271590": {
             "display_name": "Grand Theft Auto V",
