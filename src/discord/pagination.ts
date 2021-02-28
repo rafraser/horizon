@@ -39,5 +39,12 @@ export async function sendPaginatedEmbed (message: Message, pages: MessageEmbed[
     await embedMessage.edit(pages[currentPage])
   })
 
-  reactionCollector.on('end', () => {})
+  // Remove page buttons when the time is up
+  reactionCollector.on('end', () => {
+    if (embedMessage.deleted) return
+
+    embedMessage.reactions.removeAll()
+  })
+
+  return embedMessage
 }
