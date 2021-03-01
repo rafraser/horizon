@@ -1,6 +1,6 @@
 import { Message, MessageEmbed, MessageReaction, User } from 'discord.js'
 
-export async function sendPaginatedEmbed (message: Message, pages: MessageEmbed[], time = 60000, pageEmojis: ['⏪', '⏩']) {
+export async function sendPaginatedEmbed (message: Message, pages: MessageEmbed[], time = 60000, pageEmojis = ['⏪', '⏩']) {
   let currentPage = 0
 
   const embedMessage = await message.channel.send(pages[currentPage])
