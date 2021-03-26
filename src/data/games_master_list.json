@@ -420,11 +420,25 @@
                 "competitive"
             ]
         },
+        "361420": {
+            "display_name": "Astroneer",
+            "tags": [
+                "coop",
+                "sandbox"
+            ]
+        },
         "362890": {
             "display_name": "Black Mesa",
             "tags": [
                 "versus",
                 "shooter"
+            ]
+        },
+        "366090": {
+            "display_name": "Colony Survival",
+            "tags": [
+                "coop",
+                "sandbox"
             ]
         },
         "383790": {
@@ -490,6 +504,15 @@
                 "versus"
             ]
         },
+        "493520": {
+            "display_name": "GTFO",
+            "max_players": 4,
+            "tags": [
+                "coop",
+                "horror",
+                "shooter"
+            ]
+        },
         "548430": {
             "display_name": "Deep Rock Galactic",
             "max_players": 4,
@@ -518,6 +541,15 @@
             "tags": [
                 "coop",
                 "puzzle"
+            ]
+        },
+        "594650": {
+            "display_name": "Hunt: Showdown",
+            "tags": [
+                "coop",
+                "versus",
+                "shooter",
+                "horror"
             ]
         },
         "602770": {
@@ -707,6 +739,14 @@
             "tags": [
                 "coop",
                 "horror"
+            ]
+        },
+        "1349230": {
+            "display_name": "5D Chess with Multiverse Time Travel",
+            "max_players": 2,
+            "tags": [
+                "versus",
+                "board"
             ]
         }
     }
