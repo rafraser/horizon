@@ -1,11 +1,14 @@
-import { HorizonClient, Message } from '../command'
-import { MessageEmbed, GuildMember } from 'discord.js'
-import discordLink from '../../data/temp_discord_link.json'
-import gamesMasterList from '../../data/games_master_list.json'
 import { promises } from 'fs'
 import path from 'path'
+import { MessageEmbed, GuildMember } from 'discord.js'
+
+import { HorizonClient, Message } from '../command'
 import { sendPaginatedEmbed } from '../pagination'
 import { SearchOptions, createSearchOptions } from '../utils'
+
+// todo - this is a terrible way to handle this!
+import discordLink from '../../data/temp_discord_link.json'
+import gamesMasterList from '../../data/games_master_list.json'
 
 /* eslint-disable */
 type GameInfo = {
@@ -114,6 +117,17 @@ function makeEmbedFromPage (gamesPage: GameInfo[], currentPage: number, maxPage:
   return embed
 }
 
+async function sendAllGames (message: Message, options: SearchOptions) {
+  const steamGamesList = (gamesMasterList.steam_games as Record<string, GameInfo>)
+  const gamesTable = Object.values(steamGamesList)
+    .filter(game => options.tags.every(tag => game.tags.includes(tag)))
+    .sort((a, b) => a.display_name.localeCompare(b.display_name))
+    .reduce((acc, game) => {
+      return acc + `${game.display_name.substring(0, 15)}\n`
+    }, '```elm\n') + '```'
+  await message.channel.send(gamesTable)
+}
+
 export default {
   name: 'games',
   description: 'Check a list of games in common between users',
@@ -121,7 +135,10 @@ export default {
   async execute (client: HorizonClient, message: Message, args: string[]) {
     // Parse options from args
     const options = await createSearchOptions(message, args)
-    if (options.users.length <= 1) {
+    if (options.users.length === 0) {
+      await sendAllGames(message, options)
+      return
+    } else if (options.users.length <= 1) {
       await message.channel.send('I need at least two users to work with!')
       return
     }
