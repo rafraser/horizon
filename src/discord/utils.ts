@@ -57,3 +57,13 @@ export async function createSearchOptions (message: Message, args: string[], fin
 
   return options
 }
+
+export function padOrTrim (string: string, length: number): string {
+  const trimmed = string.length > length ? string.substring(0, length) : string
+  return trimmed.padEnd(length, ' ')
+}
+
+export function padOrTrimLeft (string: string, length: number): string {
+  const trimmed = string.length > length ? string.substring(0, length) : string
+  return trimmed.padStart(length, ' ')
+}
