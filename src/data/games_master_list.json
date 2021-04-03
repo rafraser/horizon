@@ -1,5 +1,12 @@
 {
     "nonsteam_games": {
+        "league": {
+            "display_name": "League of Legends",
+            "tags": [
+                "moba",
+                "versus"
+            ]
+        },
         "minecraft": {
             "display_name": "Minecraft",
             "tags": [
@@ -11,13 +18,6 @@
             "tags": [
                 "verus",
                 "shooter"
-            ]
-        },
-        "league": {
-            "display_name": "League of Legends",
-            "tags": [
-                "moba",
-                "versus"
             ]
         }
     },
@@ -266,10 +266,10 @@
         },
         "238460": {
             "display_name": "Battleblock Theater",
+            "max_players": 2,
             "tags": [
                 "coop"
-            ],
-            "max_players": 2
+            ]
         },
         "244770": {
             "display_name": "StarMade",
@@ -321,12 +321,12 @@
             ]
         },
         "270450": {
-            "display_name": "Stardew Valley",
+            "display_name": "Robot Roller-Derby Disco Dodgeball",
+            "max_players": 4,
             "tags": [
                 "versus",
                 "casual"
-            ],
-            "max_players": 4
+            ]
         },
         "271590": {
             "display_name": "Grand Theft Auto V",
@@ -420,11 +420,25 @@
                 "competitive"
             ]
         },
+        "361420": {
+            "display_name": "Astroneer",
+            "tags": [
+                "coop",
+                "sandbox"
+            ]
+        },
         "362890": {
             "display_name": "Black Mesa",
             "tags": [
                 "versus",
                 "shooter"
+            ]
+        },
+        "366090": {
+            "display_name": "Colony Survival",
+            "tags": [
+                "coop",
+                "sandbox"
             ]
         },
         "383790": {
@@ -448,12 +462,22 @@
                 "shooter"
             ]
         },
+        "403120": {
+            "display_name": "The Game of Life",
+            "tags": [
+                "versus",
+                "board"
+            ]
+        },
         "413150": {
             "display_name": "Stardew Valley",
             "tags": [
                 "coop",
                 "casual"
             ]
+        },
+        "420290": {
+            "display_name": "Blackwake"
         },
         "429780": {
             "display_name": "Bunny Hop League",
@@ -480,12 +504,28 @@
                 "versus"
             ]
         },
+        "493520": {
+            "display_name": "GTFO",
+            "max_players": 4,
+            "tags": [
+                "coop",
+                "horror",
+                "shooter"
+            ]
+        },
         "548430": {
             "display_name": "Deep Rock Galactic",
             "max_players": 4,
             "tags": [
                 "coop",
                 "shooter"
+            ]
+        },
+        "578080": {
+            "display_name": "PUBG",
+            "tags": [
+                "shooter",
+                "battle royale"
             ]
         },
         "581320": {
@@ -503,6 +543,15 @@
                 "puzzle"
             ]
         },
+        "594650": {
+            "display_name": "Hunt: Showdown",
+            "tags": [
+                "coop",
+                "versus",
+                "shooter",
+                "horror"
+            ]
+        },
         "602770": {
             "display_name": "Clatter",
             "tags": [
@@ -515,11 +564,26 @@
                 "sandbox"
             ]
         },
+        "607050": {
+            "display_name": "Wargroove",
+            "max_players": 6,
+            "tags": [
+                "coop",
+                "versus",
+                "strategy"
+            ]
+        },
         "613730": {
             "display_name": "Need For Drink",
             "max_players": 2,
             "tags": [
                 "versus"
+            ]
+        },
+        "632360": {
+            "display_name": "Risk of Rain 2",
+            "tags": [
+                "coop"
             ]
         },
         "638070": {
@@ -550,6 +614,13 @@
                 "horror"
             ]
         },
+        "704270": {
+            "display_name": "Generation Zero",
+            "tags": [
+                "coop",
+                "shooter"
+            ]
+        },
         "739630": {
             "display_name": "Phasmophobia",
             "tags": [
@@ -562,6 +633,13 @@
             "tags": [
                 "versus",
                 "shooter"
+            ]
+        },
+        "794800": {
+            "display_name": "Clue",
+            "tags": [
+                "versus",
+                "board"
             ]
         },
         "823130": {
@@ -577,6 +655,13 @@
             "tags": [
                 "coop",
                 "puzzle"
+            ]
+        },
+        "892970": {
+            "display_name": "Valheim",
+            "tags": [
+                "coop",
+                "sandbox"
             ]
         },
         "914260": {
@@ -638,12 +723,30 @@
                 "battle royale"
             ]
         },
+        "1131190": {
+            "display_name": "NERTS! Online",
+            "tags": [
+                "versus",
+                "board"
+            ]
+        },
+        "1172620": {
+            "display_name": "Sea of Thieves"
+        },
         "1310510": {
             "display_name": "Handy Harry's Haunted House Services",
             "max_players": 8,
             "tags": [
                 "coop",
                 "horror"
+            ]
+        },
+        "1349230": {
+            "display_name": "5D Chess with Multiverse Time Travel",
+            "max_players": 2,
+            "tags": [
+                "versus",
+                "board"
             ]
         }
     }
