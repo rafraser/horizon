@@ -93,6 +93,17 @@ def scrape_id(steamid: str, output: str, valid_game_ids):
     # Extract game IDs from page and save output
     games = get_appid_list(page_content)
     games_filtered = [game_id for game_id in games if game_id in valid_game_ids]
+
+    # Don't save if we have 0 games (something has gone wrong)
+    if len(games_filtered) < 1:
+        return
+
+    # Don't save if we've decreased in games
+    if len(games_filtered) < user_game_data["steam_games"]:
+        print(steamid, "has decreased in games! Please investigate.")
+        return
+
+    # Update & save
     user_game_data["steam_games"] = games_filtered
     save_to_json(output, steamid, user_game_data)
 
@@ -108,15 +119,9 @@ def main(args):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(
-        description="Scrape a list of owned AppIDs for a given Steam account"
-    )
-    parser.add_argument(
-        "-all", help="Scrape everyone from the Discord link list?", action="store_true"
-    )
-    parser.add_argument(
-        "--users", nargs="*", help="SteamID64 to scrape owned games from"
-    )
+    parser = argparse.ArgumentParser(description="Scrape a list of owned AppIDs for a given Steam account")
+    parser.add_argument("-all", help="Scrape everyone from the Discord link list?", action="store_true")
+    parser.add_argument("--users", nargs="*", help="SteamID64 to scrape owned games from")
     parser.add_argument(
         "--output",
         default="owned_games",
