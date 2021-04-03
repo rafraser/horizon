@@ -146,24 +146,11 @@ export default {
 
     // Condense users (reporting anyone who we couldn't find)
     let users = options.users
-    const emptyUserIndexes = users.map((e, i) => e ? null : i).filter(x => x !== null)
-    if (emptyUserIndexes.length > 0) {
-      const emptyUsers = emptyUserIndexes.map(idx => options.users[idx])
-      await message.channel.send(`I couldn't find: ${emptyUsers.join(', ')}`)
-    }
     users = users.filter(x => x !== null)
 
-    // Map to SteamIDs
-    let steamIDs = users.map(user => userToSteamID(user))
-    const emptySteamIndexes = steamIDs.map((e, i) => e ? null : i).filter(x => x !== null)
-    if (emptySteamIndexes.length > 0) {
-      const emptySteamUsers = emptySteamIndexes.map(idx => users[idx]).map(user => user.displayName)
-      await message.channel.send(`No SteamIDs for: ${emptySteamUsers.join(', ')}`)
-    }
-    steamIDs = steamIDs.filter(x => x !== null)
-    if (steamIDs.length < 2) {
-      return
-    }
+    const usersAndSteamIDs = users.map(u => [u, userToSteamID(u)] as [GuildMember, string]).filter(x => x[1] !== null)
+    const steamIDs = usersAndSteamIDs.map(x => x[1])
+    const usersWithSteam = usersAndSteamIDs.map(x => x[0])
 
     // Fetch the game data
     let gameData = await loadGameInfo(steamIDs)
@@ -177,7 +164,7 @@ export default {
     }
 
     // Add a description with all our users
-    const description = 'Games shared by: ' + users.map(user => user.displayName).join(', ')
+    const description = 'Games shared by: ' + usersWithSteam.map(user => user.displayName).join(', ')
 
     // Paginate
     const pageSize = 8
