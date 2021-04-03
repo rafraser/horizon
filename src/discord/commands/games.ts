@@ -102,10 +102,11 @@ function sortGames (games: GameInfo[], options: SearchOptions): GameInfo[] {
   }
 }
 
-function makeEmbedFromPage (gamesPage: GameInfo[], currentPage: number, maxPage: number): MessageEmbed {
+function makeEmbedFromPage (gamesPage: GameInfo[], description: string, currentPage: number, maxPage: number): MessageEmbed {
   // Make a nice embed
   const embed = new MessageEmbed()
     .setTitle('Best Games')
+    .setDescription(description)
     .setColor('#1B9CFC')
     .setThumbnail(`https://horizon.sealion.space/img/games/${gamesPage[0].id}.png`)
     .setFooter(`Page ${currentPage + 1}/${maxPage}`)
@@ -175,10 +176,13 @@ export default {
       return
     }
 
+    // Add a description with all our users
+    const description = 'Games shared by: ' + users.map(user => user.displayName).join(', ')
+
     // Paginate
     const pageSize = 8
     const paged = [...Array(Math.ceil(gameData.length / pageSize))].map(_ => gameData.splice(0, pageSize))
-    const embedPages = paged.map((curr, idx) => makeEmbedFromPage(curr, idx, paged.length))
+    const embedPages = paged.map((curr, idx) => makeEmbedFromPage(curr, description, idx, paged.length))
     await sendPaginatedEmbed(message, embedPages)
   }
 }
