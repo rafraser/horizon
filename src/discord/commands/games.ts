@@ -19,6 +19,11 @@ type GameInfo = {
   max_players?: number
   owners?: number
 }
+
+type UserGameData = {
+  steam_games?: string[],
+  nonsteam_games?: string[]
+}
 /* eslint-enable */
 
 function gameFromID (gameID: string) {
@@ -41,16 +46,26 @@ function userToSteamID (user: GuildMember): string {
 
 async function loadUserGamesData (steamID: string): Promise<string[]> {
   try {
-    const gameData = JSON.parse(await promises.readFile(path.join('./owned_games', steamID) + '.json', 'utf8'))
-    return gameData.steam_games.concat(gameData.nonsteam_games)
+    const gameData = JSON.parse(await promises.readFile(path.join('./owned_games', steamID) + '.json', 'utf8')) as UserGameData
+    let games = [] as string[]
+    if (gameData.steam_games != null) {
+      games = games.concat(gameData.steam_games)
+    }
+
+    if (gameData.nonsteam_games != null) {
+      games = games.concat(gameData.nonsteam_games)
+    }
+
+    return games
   } catch (e) {
     return null
   }
 }
 
-async function loadGameInfo (steamIDs: string[]): Promise<GameInfo[]> {
+async function loadGameInfo (steamIDs: string[]): Promise<[GameInfo[], boolean[]]> {
   // List of lists of owned Steam games
   const gamesList = await Promise.all(steamIDs.map(loadUserGamesData))
+  const hasGames = gamesList.map(x => x.length >= 1)
   const gamesFlattened : string[] = [].concat(...gamesList.filter(e => e != null))
 
   // Count up the games
@@ -60,7 +75,7 @@ async function loadGameInfo (steamIDs: string[]): Promise<GameInfo[]> {
   }, {} as Record<string, number>)
 
   // Convert to array of game data
-  return Object.entries(gameCounts).map(([gameID, count]) => {
+  const gameData = Object.entries(gameCounts).map(([gameID, count]) => {
     const game = gameFromID(gameID)
     if (game) {
       game.owners = count
@@ -69,6 +84,8 @@ async function loadGameInfo (steamIDs: string[]): Promise<GameInfo[]> {
       return null
     }
   }).filter(e => e != null && e.owners > 1)
+
+  return [gameData, hasGames]
 }
 
 function filterGames (games: GameInfo[], options: SearchOptions, playerCount: number) {
@@ -145,15 +162,11 @@ export default {
     }
 
     // Condense users (reporting anyone who we couldn't find)
-    let users = options.users
-    users = users.filter(x => x !== null)
-
-    const usersAndSteamIDs = users.map(u => [u, userToSteamID(u)] as [GuildMember, string]).filter(x => x[1] !== null)
-    const steamIDs = usersAndSteamIDs.map(x => x[1])
-    const usersWithSteam = usersAndSteamIDs.map(x => x[0])
+    const users = options.users.filter(x => x !== null)
+    const steamIDs = users.map(u => userToSteamID(u) || '0')
 
     // Fetch the game data
-    let gameData = await loadGameInfo(steamIDs)
+    let [gameData, hasGames] = await loadGameInfo(steamIDs)
     gameData = filterGames(gameData, options, steamIDs.length)
     gameData = sortGames(gameData, options)
 
@@ -164,7 +177,8 @@ export default {
     }
 
     // Add a description with all our users
-    const description = 'Games shared by: ' + usersWithSteam.map(user => user.displayName).join(', ')
+    const usersWithGames = users.filter((_, idx) => hasGames[idx])
+    const description = 'Games shared by: ' + usersWithGames.map(user => user.displayName).join(', ')
 
     // Paginate
     const pageSize = 8
