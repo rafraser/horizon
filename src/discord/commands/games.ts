@@ -156,7 +156,7 @@ export default {
     // Map to SteamIDs
     let steamIDs = users.map(user => userToSteamID(user))
     const emptySteamIndexes = steamIDs.map((e, i) => e ? null : i).filter(x => x !== null)
-    if (emptyUserIndexes.length > 0) {
+    if (emptySteamIndexes.length > 0) {
       const emptySteamUsers = emptySteamIndexes.map(idx => users[idx]).map(user => user.displayName)
       await message.channel.send(`No SteamIDs for: ${emptySteamUsers.join(', ')}`)
     }

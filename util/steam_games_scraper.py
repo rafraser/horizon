@@ -99,7 +99,7 @@ def scrape_id(steamid: str, output: str, valid_game_ids):
         return
 
     # Don't save if we've decreased in games
-    if len(games_filtered) < user_game_data["steam_games"]:
+    if len(games_filtered) < user_game_data.get("steam_games", []):
         print(steamid, "has decreased in games! Please investigate.")
         return
 
