@@ -137,6 +137,13 @@
                 "coop"
             ]
         },
+        "22230": {
+            "display_name": "Rock of Ages",
+            "max_players": 4,
+            "tags": [
+                "versus"
+            ]
+        },
         "22600": {
             "display_name": "Worms Reloaded",
             "tags": [
@@ -493,6 +500,13 @@
                 "golf"
             ]
         },
+        "434460": {
+            "display_name": "Rock of Ages 2: Bigger & Boulder",
+            "max_players": 4,
+            "tags": [
+                "versus"
+            ]
+        },
         "470220": {
             "display_name": "UNO",
             "tags": [
@@ -696,6 +710,13 @@
                 "horror"
             ]
         },
+        "973580": {
+            "display_name": "Sniper Ghost Warrior Contracts",
+            "tags": [
+                "versus",
+                "shooter"
+            ]
+        },
         "976730": {
             "display_name": "Halo: The Master Chief Collection",
             "tags": [
@@ -717,11 +738,25 @@
                 "casual"
             ]
         },
+        "1078920": {
+            "display_name": "Main Assembly",
+            "max_players": 4,
+            "tags": [
+                "sandbox"
+            ]
+        },
         "1097150": {
             "display_name": "Fall Guys: Ultimate Knockout",
             "tags": [
                 "party",
                 "battle royale"
+            ]
+        },
+        "1101360": {
+            "display_name": "Rock of Ages 3: Make & Break",
+            "max_players": 4,
+            "tags": [
+                "versus"
             ]
         },
         "1131190": {
