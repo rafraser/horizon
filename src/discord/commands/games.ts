@@ -95,7 +95,7 @@ function filterGames (games: GameInfo[], options: SearchOptions, playerCount: nu
 }
 
 function sortGames (games: GameInfo[], options: SearchOptions): GameInfo[] {
-  switch (options.keyed.search || 'default') {
+  switch (options.keyed.sort || 'default') {
     case 'alphabetical':
       return games.sort((a, b) => a.display_name.localeCompare(b.display_name))
 
